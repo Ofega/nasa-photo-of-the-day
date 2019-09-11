@@ -17,9 +17,7 @@ function App() {
   });
   const [currentDate, setCurrentDate] = useState(today)
   const [isLoading, setLoadingIndicator] = useState(true);
-
-  // NASA API URL WITH DYNAMIC DATE
-  let nasa_api = `https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`;
+  const [api_url, setApi_url] = useState(`https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`)
 
   // HANDLE CHANGE IN DATE INPUT
   const handleDateChange = (e) => {
@@ -29,12 +27,12 @@ function App() {
 
   // WATCH CURRENT DATE CHANGE AND UPDATE NASA API
   useEffect(() => {
-    nasa_api = `https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`;
+    setApi_url(`https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`);
   }, [currentDate])
 
   // GET INITIAL DATA FROM API & WATCH NASA API CHANGE
   useEffect(() => {
-    axios.get(nasa_api)
+    axios.get(api_url)
       .then(response => {
         setApod({
           title: response.data.title,
@@ -44,7 +42,7 @@ function App() {
         });
         setLoadingIndicator(false);
       })
-  }, [nasa_api])
+  }, [api_url])
 
   return (
     <div className="App">
@@ -53,7 +51,8 @@ function App() {
         <p>
           Check out previous days: <input 
             type="date" 
-            value={currentDate} 
+            value={currentDate}
+            min="1996-12-29" 
             max={today} 
             onChange={handleDateChange} 
           />
