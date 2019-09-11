@@ -5,8 +5,8 @@ import "./App.css";
 
 function App() {
 
-  // SET TODAY'S DATE
   const today = new Date().toISOString().substr(0, 10);
+  const nasa_api = 'https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=';
 
   // STATE DECLARATION
   const [apod, setApod] = useState({
@@ -15,9 +15,9 @@ function App() {
     media_type: '',
     url: ''
   });
-  const [currentDate, setCurrentDate] = useState(today)
+  const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setLoadingIndicator] = useState(true);
-  const [api_url, setApi_url] = useState(`https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`)
+  const [api_url, setApi_url] = useState(`${nasa_api}${currentDate}`);
 
   // HANDLE CHANGE IN DATE INPUT
   const handleDateChange = (e) => {
@@ -27,7 +27,7 @@ function App() {
 
   // WATCH CURRENT DATE CHANGE AND UPDATE NASA API
   useEffect(() => {
-    setApi_url(`https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`);
+    setApi_url(`${nasa_api}${currentDate}`);
   }, [currentDate])
 
   // GET INITIAL DATA FROM API & WATCH NASA API CHANGE
