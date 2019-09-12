@@ -6,10 +6,9 @@ import "./App.css";
 function App() {
 
   const today = new Date().toISOString().substr(0, 10);
-  const nasa_api = 'https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf';
 
   // STATE DECLARATION
-  const [apod, setApod] = useState({});
+  const [returnedData, setreturnedData] = useState({});
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setLoadingIndicator] = useState(true);
 
@@ -21,15 +20,15 @@ function App() {
 
   // GET INITIAL DATA FROM API & WATCH NASA API CHANGE
   useEffect(() => {
-    axios.get(`${nasa_api}&date=${currentDate}`)
+    axios.get(`https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=${currentDate}`)
       .then(response => {
-        setApod(response.data);
+        setreturnedData(response.data);
         setLoadingIndicator(false);
       })
   }, [currentDate])
 
   // DESTRUCTURED API DATA
-  const { title, explanation, media_type, url } = apod;
+  const { title, explanation, media_type, url } = returnedData;
 
   return (
     <div className="App">
