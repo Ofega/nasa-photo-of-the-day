@@ -6,18 +6,12 @@ import "./App.css";
 function App() {
 
   const today = new Date().toISOString().substr(0, 10);
-  const nasa_api = 'https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf&date=';
+  const nasa_api = 'https://api.nasa.gov/planetary/apod?api_key=ovyKFkAQbLjcqABOjMU68doBcdgmawfk7TjlFVrf';
 
   // STATE DECLARATION
-  const [apod, setApod] = useState({
-    title: '',
-    explanation: '',
-    media_type: '',
-    url: ''
-  });
+  const [apod, setApod] = useState({});
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setLoadingIndicator] = useState(true);
-  const [api_url, setApi_url] = useState(`${nasa_api}${currentDate}`);
 
   // HANDLE CHANGE IN DATE INPUT
   const handleDateChange = (e) => {
@@ -25,24 +19,17 @@ function App() {
     setCurrentDate(e.currentTarget.value);
   }
 
-  // WATCH CURRENT DATE CHANGE AND UPDATE NASA API
-  useEffect(() => {
-    setApi_url(`${nasa_api}${currentDate}`);
-  }, [currentDate])
-
   // GET INITIAL DATA FROM API & WATCH NASA API CHANGE
   useEffect(() => {
-    axios.get(api_url)
+    axios.get(`${nasa_api}&date=${currentDate}`)
       .then(response => {
-        setApod({
-          title: response.data.title,
-          explanation: response.data.explanation,
-          media_type: response.data.media_type,
-          url: response.data.url
-        });
+        setApod(response.data);
         setLoadingIndicator(false);
       })
-  }, [api_url])
+  }, [currentDate])
+
+  // DESTRUCTURED API DATA
+  const { title, explanation, media_type, url } = apod;
 
   return (
     <div className="App">
@@ -59,11 +46,11 @@ function App() {
         </p>
       </div>
       <Media 
-        url={apod.url} 
-        title={apod.title} 
-        explanation={apod.explanation} 
+        url={url} 
+        title={title} 
+        explanation={explanation} 
         isLoading={isLoading}
-        media_type={apod.media_type}
+        media_type={media_type}
       />
     </div>
   );
